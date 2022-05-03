@@ -79,9 +79,29 @@ namespace RoomRentalBackEnd.Repository.OwnerRepository
             try
             {
                 var AllOwnerData = _context.OwnerModelTable.Where(x => x.UserId == Userid && x.IsActive==true ).ToList();
-                return new OwnerResponceDTOs()
+            var totalCount = 0;
+            var pendingCount = 0;
+            var successCount = 0;
+            var rejectedCount = 0;
+            foreach (var items in AllOwnerData)
+            {
+               if (items.OwnerDataStatus=="pending")
+               {
+                 pendingCount = pendingCount+1;
+               }
+               if (items.OwnerDataStatus=="success")
+               {
+                  successCount = successCount+1;
+               }
+               if (items.OwnerDataStatus=="rejected")
+               {
+                  rejectedCount = rejectedCount+1;
+               }
+               totalCount = totalCount+1;
+            }
+            return new OwnerResponceDTOs()
                 {
-                    Data = AllOwnerData,
+                    Data = new { AllOwnerData , totalCount , pendingCount, successCount , rejectedCount } ,
                     Msg = "get all Owner data sucessfully",
                     Success = true
                 };
