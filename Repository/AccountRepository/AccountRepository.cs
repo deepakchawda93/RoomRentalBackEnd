@@ -83,7 +83,7 @@ namespace RoomRentalBackEnd.Repository.AccountRepository
                     UserEmail = null });
             }
             var role = await _userManager.GetRolesAsync(userData);
-            if (role[0]=="user" && role[0]=="owner")
+            if (role[0]=="user" || role[0]=="owner")
             {
                 IdentityOptions _options = new IdentityOptions();
                 //generete token here

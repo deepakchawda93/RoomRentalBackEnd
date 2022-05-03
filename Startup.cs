@@ -42,9 +42,6 @@ namespace RoomRentalBackEnd
         {
             services.AddSwaggerGen();
 
-
-
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {
