@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoomRentalBackEnd.DTOs;
 using RoomRentalBackEnd.IRepository.IOwnerRepository;
@@ -47,11 +48,11 @@ namespace RoomRentalBackEnd.Controllers.OwnerController
         }
 
         [HttpPost("AddOwnerData")]
-        public async Task<IActionResult> PostOwnerData([FromBody] OwnerModel ownerModel)
+        public async Task<IActionResult> PostOwnerData([FromBody] OwnerModel ownerModel,IFormFile image)
         {
             if (ModelState.IsValid)
             {
-                var result = await _ownerRepository.PostOwnerData(ownerModel);
+                var result = await _ownerRepository.PostOwnerData(ownerModel, image);
                 if (result.Success == false)
                 {
                     return Ok(result);
@@ -117,7 +118,7 @@ namespace RoomRentalBackEnd.Controllers.OwnerController
 
         }
         [HttpPut("updateOwnerAccount/{EditOwnerid}")]
-        public async Task<IActionResult> EditOwnerAccount([FromRoute] string EditOwnerid, [FromBody] OwnerProfileEditDTOs ownerProfileEditDTOs )
+        public async Task<IActionResult>EditOwnerAccount([FromRoute] string EditOwnerid, [FromBody] OwnerProfileEditDTOs ownerProfileEditDTOs )
         {
             if (ModelState.IsValid)
             {

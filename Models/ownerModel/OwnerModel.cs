@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoomRentalBackEnd.Models.ownerModel
 {
@@ -24,13 +26,17 @@ namespace RoomRentalBackEnd.Models.ownerModel
         public string Colony { get; set; }
         [Required]
         public int ZipCode { get; set; }
-        [Required]
-        public string Image { get; set; }
+      [NotMapped]
+      public IFormFile ImageFile { get; set; }
+
+      [NotMapped]
+      public string ImageSrc { get; set; }
+     
         [Required]
         public string UserId { get; set; }
         public string OwnerDataStatus { get; set; }
         
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set;}
 
     }
 }

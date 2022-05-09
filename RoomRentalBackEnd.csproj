@@ -6,9 +6,17 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\NewFolder1\**" />
+    <Compile Remove="Images\**" />
+    <Compile Remove="Models\NewFolder\**" />
     <Content Remove="Controllers\NewFolder1\**" />
+    <Content Remove="Images\**" />
+    <Content Remove="Models\NewFolder\**" />
     <EmbeddedResource Remove="Controllers\NewFolder1\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <EmbeddedResource Remove="Models\NewFolder\**" />
     <None Remove="Controllers\NewFolder1\**" />
+    <None Remove="Images\**" />
+    <None Remove="Models\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,8 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="Models\NewFolder\" />
     <Folder Include="Repository\NewFolder\" />
   </ItemGroup>
 
