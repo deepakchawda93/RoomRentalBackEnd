@@ -59,6 +59,7 @@ namespace RoomRentalBackEnd
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IOwnerRepository, OwnerRepository>();
             services.AddTransient<IAdminRepository,AdminRepository>();
+         
             /* services.AddDbContext<DbContextClass>();*/
             /*    second way to make it connection bitween database and project*/
             /*    services.AddDbContext<DbContextClass>(options => options.UseSqlServer("Server=.;Database=BookStoreApi;Integrated Security = True"));*/
@@ -110,7 +111,7 @@ namespace RoomRentalBackEnd
 
         
 
-            //this code form model validation error send to frontEnd with ok method
+            //this code form model validation error send to frontEnd with ok method and msg
             services.AddMvc()
         .ConfigureApiBehaviorOptions(options =>
         {

@@ -12,47 +12,47 @@ using System.Threading.Tasks;
 
 namespace RoomRentalBackEnd.Controllers.OwnerController
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "owner")]
-    //[Route("api/[controller]")]
-    [ApiController]
-    public class OwnerController : ControllerBase
-    {
-        private readonly IOwnerRepository _ownerRepository;
-        public OwnerController(IOwnerRepository ownerRepository) {
+   [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "owner")]
+   //[Route("api/[controller]")]
+   [ApiController]
+   public class OwnerController : ControllerBase
+   {
+      private readonly IOwnerRepository _ownerRepository;
+      public OwnerController(IOwnerRepository ownerRepository) {
 
-            _ownerRepository = ownerRepository;
-        }
+         _ownerRepository = ownerRepository;
+      }
 
-        [HttpGet("getOwnerData/{Userid}")]
-        public IActionResult GetOwnerAllData([FromRoute] string Userid)
-        {
-            if (ModelState.IsValid)
+      [HttpGet("getOwnerData/{Userid}")]
+      public IActionResult GetOwnerAllData([FromRoute] string Userid)
+      {
+         if (ModelState.IsValid)
+         {
+            var result = _ownerRepository.GetOwnerAllData(Userid);
+            if (result.Success == true)
             {
-                var result = _ownerRepository.GetOwnerAllData(Userid);
-                if (result.Success == true)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return Ok(result);
-
-                }
+               return Ok(result);
             }
             else
             {
-                return Ok(ModelState);
+               return Ok(result);
 
             }
+         }
+         else
+         {
+            return Ok(ModelState);
 
-        }
+         }
 
-        [HttpPost("AddOwnerData")]
-        public async Task<IActionResult> PostOwnerData([FromBody] OwnerModel ownerModel,IFormFile image)
+      }
+
+      [HttpPost("AddOwnerData")]
+      public async Task<IActionResult> PostOwnerData([FromBody] OwnerModel ownerModel)
         {
             if (ModelState.IsValid)
             {
-                var result = await _ownerRepository.PostOwnerData(ownerModel, image);
+                var result = await _ownerRepository.PostOwnerData(ownerModel);
                 if (result.Success == false)
                 {
                     return Ok(result);

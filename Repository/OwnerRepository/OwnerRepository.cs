@@ -1,6 +1,10 @@
 ﻿
 using BookStoreApi.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using RoomRentalBackEnd.DataBaseConnection;
 using RoomRentalBackEnd.DTOs;
 using RoomRentalBackEnd.IRepository.IOwnerRepository;
@@ -8,6 +12,7 @@ using RoomRentalBackEnd.Models.ownerModel;
 using RoomRentalBackEnd.Models.SignUp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,20 +24,23 @@ namespace RoomRentalBackEnd.Repository.OwnerRepository
         /*  here i am access Dbconnection data*/
         private readonly DbContextConnect _context;
         private readonly UserManager<ExtraUserModel> _userManager;
+      private readonly IWebHostEnvironment _hostEnvironment;
 
-        /* it is a constructure */
-        public OwnerRepository(DbContextConnect context, UserManager<ExtraUserModel> userManager)
+      /* it is a constructure */
+      public OwnerRepository(DbContextConnect context, UserManager<ExtraUserModel> userManager, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _userManager = userManager;
+         this._hostEnvironment = hostEnvironment;
 
-        }
+      }
         public async Task<OwnerResponceDTOs> PostOwnerData(OwnerModel ownerModel)
         {
             try
             {
+            ownerModel.ImageSrc = await SaveImage(ownerModel.ImageFile);
 
-                var OwnerDataAdd = new OwnerModel()
+            var OwnerDataAdd = new OwnerModel()
                 {
                     
                     Address = ownerModel.Address,
@@ -41,14 +49,15 @@ namespace RoomRentalBackEnd.Repository.OwnerRepository
                     NumberOfMambers = ownerModel.NumberOfMambers,
                     Price = ownerModel.Price,
                     ZipCode = ownerModel.ZipCode,
-                    Image = ownerModel.Image,
                     State = ownerModel.State,
+                    ImageSrc = ownerModel.ImageSrc,
                     UserId = ownerModel.UserId,
                     OwnerDataStatus = "pending",
                     IsActive = true,
 
 
                 };
+
                   _context.OwnerModelTable.Add(OwnerDataAdd);
                 await _context.SaveChangesAsync();
                 return new OwnerResponceDTOs()
@@ -135,7 +144,7 @@ namespace RoomRentalBackEnd.Repository.OwnerRepository
                     Colony = ownerModel.Colony,
                     Price = ownerModel.Price,
                     ZipCode = ownerModel.ZipCode,
-                    Image = ownerModel.Image,
+                   //Image = ownerModel.Image,
                     State = ownerModel.State,
                     UserId = ownerModel.UserId,
                     OwnerDataStatus = "pending",
@@ -252,7 +261,8 @@ namespace RoomRentalBackEnd.Repository.OwnerRepository
                 };
             }
         }
-        public async Task<OwnerResponceDTOs> EditOwnerAccount(string EditOwnerid,OwnerProfileEditDTOs ownerProfileEditDTOs)        {
+        public async Task<OwnerResponceDTOs> EditOwnerAccount(string EditOwnerid,OwnerProfileEditDTOs ownerProfileEditDTOs)       
+        {
             try
             {
                 var OwnderDetails = await _userManager.FindByIdAsync(EditOwnerid);
@@ -293,5 +303,49 @@ namespace RoomRentalBackEnd.Repository.OwnerRepository
         }
 
 
-    }
+
+      [NonAction]
+      public async Task<string> SaveImage(IFormFile imageFile)
+      {
+         try
+         {
+            if(imageFile.Length > 0)
+            {
+               if(!Directory.Exists(_hostEnvironment.WebRootPath + "\\Upload\\"))
+               {
+                  Directory.CreateDirectory(_hostEnvironment.WebRootPath + "\\Upload\\");
+               }
+               string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+               imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
+               var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+               using (var fileStream = new FileStream(imagePath, FileMode.Create))
+               {
+                  await imageFile.CopyToAsync(fileStream);
+               }
+               return imageName;
+            }
+            else
+            {
+               return "Failed";
+            }
+         }
+         catch (Exception ex)
+         {
+            return ex.Message.ToString();
+            
+         }
+
+         
+      }
+
+      [NonAction]
+      public void DeleteImage(string imageName)
+      {
+         var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+         if (System.IO.File.Exists(imagePath))
+            System.IO.File.Delete(imagePath);
+      }
+
+
+   }
 }

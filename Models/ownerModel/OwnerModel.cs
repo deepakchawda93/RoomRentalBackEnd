@@ -26,11 +26,11 @@ namespace RoomRentalBackEnd.Models.ownerModel
         public string Colony { get; set; }
         [Required]
         public int ZipCode { get; set; }
-      [NotMapped]
-      public IFormFile ImageFile { get; set; }
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
 
-      [NotMapped]
-      public string ImageSrc { get; set; }
+        [NotMapped]
+        public string ImageSrc { get; set; }
      
         [Required]
         public string UserId { get; set; }
