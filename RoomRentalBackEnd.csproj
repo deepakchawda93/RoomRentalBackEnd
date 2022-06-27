@@ -8,15 +8,19 @@
     <Compile Remove="Controllers\NewFolder1\**" />
     <Compile Remove="Images\**" />
     <Compile Remove="Models\NewFolder\**" />
+    <Compile Remove="Repository\NewFolder\**" />
     <Content Remove="Controllers\NewFolder1\**" />
     <Content Remove="Images\**" />
     <Content Remove="Models\NewFolder\**" />
+    <Content Remove="Repository\NewFolder\**" />
     <EmbeddedResource Remove="Controllers\NewFolder1\**" />
     <EmbeddedResource Remove="Images\**" />
     <EmbeddedResource Remove="Models\NewFolder\**" />
+    <EmbeddedResource Remove="Repository\NewFolder\**" />
     <None Remove="Controllers\NewFolder1\**" />
     <None Remove="Images\**" />
     <None Remove="Models\NewFolder\**" />
+    <None Remove="Repository\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +45,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-    <Folder Include="Repository\NewFolder\" />
   </ItemGroup>
 
 
